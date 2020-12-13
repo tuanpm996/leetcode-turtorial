@@ -1,23 +1,21 @@
 package learning.leetcode.isvalidsudoku;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class Solution {
     public static void main(String[] args) {
 //https://leetcode.com/problems/valid-sudoku/
         char[][] ints = new char[][]{
-                {'5', '3', '.', '.', '7', '.', '.', '.', '7'},
-                {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
-                {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-                {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
-                {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-                {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
-                {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-                {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
-                {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
+                {'.', '.', '.', '.', '5', '.', '.', '1', '.'},
+                {'.', '4', '.', '3', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '3', '.', '.', '1'},
+                {'8', '.', '.', '.', '.', '.', '.', '2', '.'},
+                {'.', '.', '2', '.', '7', '.', '.', '.', '.'},
+                {'.', '1', '5', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '2', '.', '.', '.'},
+                {'.', '2', '.', '9', '.', '.', '.', '.', '.'},
+                {'.', '.', '4', '.', '.', '.', '.', '.', '.'}
         };
         boolean validSudoku = isValidSudoku(ints);
         System.out.println("is valid: " + validSudoku);
@@ -25,21 +23,44 @@ public class Solution {
     }
 
     public static boolean isValidSudoku(char[][] board) {
-        if (isValidLines(board) && isValidRows(board) && isValidSubBoxes(board)) {
-            return true;
-        }
-        return false;
+        return isValidLines(board) && isValidRows(board) && isValidSubBoxes(board);
     }
 
     private static boolean isValidSubBoxes(char[][] board) {
-        return false;
+        for (int i = 0; i < 9; i += 3) {
+            for (int j = 0; j < 9; j += 3) {
+                Set<Character> characters = new HashSet<>();
+                for (int a = i; a < i + 3; a += 1) {
+                    for (int b = j; b < j + 3; b += 1) {
+                        if (!characters.contains(board[a][b])) {
+                            characters.add(board[a][b]);
+                        } else {
+                            if (board[a][b] != '.') {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return true;
     }
 
     private static boolean isValidRows(char[][] board) {
-        for(int i = 0; i < 9; i++) {
-            board[i]
+        for (int i = 0; i < 9; i++) { // for row
+            Set<Character> characters = new HashSet<>();
+            for (char[] line : board) {
+                if (!characters.contains(line[i])) {
+                    characters.add(line[i]);
+                } else {
+                    if (line[i] != '.') {
+                        return false;
+                    }
+                }
+            }
         }
-        return false;
+        return true;
     }
 
     private static boolean isValidLines(char[][] board) {
